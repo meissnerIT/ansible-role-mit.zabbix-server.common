@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Distributed via ansible - mit.zabbix-server.common
+#
+# Fixes the issue that many zabbix snmp items sometimes return an error
+# but on the second attempt everything works again.
+# 
+# Simply executes a script with a timeout of two seconds. If the script 
+# runs into the timeout or returns an exit code not equal 0 it will be
+# called again.
+#
+# v2020-05-15 by <markus.meissner@meissner.IT>
+
+if [ "$(basename $1)" != "$1" ]; then
+    echo "Command $1 seems to be invalid"
+    exit 1
+fi
+
+i=2
+while true; do
+    RESULT=$(timeout --preserve-status ${i}s /usr/lib/zabbix/externalscripts/"$@" 2>&1)
+    # Stop loop if exit code equals 0
+    [ $? -eq 0 ] && break
+    # Stop loop if i>100
+    [ $i -gt 100 ] && break
+    i=$((i+1))
+done
+
+echo $RESULT
+

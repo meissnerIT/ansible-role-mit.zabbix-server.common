@@ -1,0 +1,12 @@
+
+- name: Ensure helper applications
+  apt: pkg=curl
+
+- name: Copy scripts to /usr/lib/zabbix/externalscripts/
+  copy: src={{ item }} dest=/usr/lib/zabbix/externalscripts/ mode=755
+  with_items:
+    - check-ssl-tls.sh
+    - check-ssl-tls-sni.sh
+    - mit-get-http-header.sh
+    - mit-zabbix-executor
+
