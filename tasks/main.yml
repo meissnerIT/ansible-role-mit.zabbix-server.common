@@ -2,11 +2,24 @@
 - name: Ensure helper applications
   apt: pkg=curl
 
+- name: Create /var/lib/mit-snmpget
+  file:
+    dest: /var/lib/mit-snmpget
+    state: directory
+    owner: zabbix
+    group: zabbix
+    mode: 0750
+
 - name: Copy scripts to /usr/lib/zabbix/externalscripts/
-  copy: src={{ item }} dest=/usr/lib/zabbix/externalscripts/ mode=755
+  copy:
+    src: "{{ item }}"
+    dest: /usr/lib/zabbix/externalscripts/
+    mode: 0755
   with_items:
     - check-ssl-tls.sh
     - check-ssl-tls-sni.sh
     - mit-get-http-header.sh
+    - mit-snmpget
+    - mit-snmpget3
     - mit-zabbix-executor
 

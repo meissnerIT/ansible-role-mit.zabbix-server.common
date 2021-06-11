@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# v2021-06-11 by markus.meissner@meissner.IT
+#
+
+SEC_NAME=$1
+AUTH_PASSWORD=$2
+AUTH_PROTOCOL=$3
+PRIV_PROTOCOL=$4
+HOST=$5
+KEY=$6
+DEFAULT_IF_EMPTY=$7
+
+DATA_DIR=/var/lib/mit-snmpget
+
+# 10.70.28.1 NB-MIB::wlanNumClients.0 -> "NB-MIB::wlanNumClients.0 = INTEGER: 2"
+# 10.70.28.1 NB-MIB::serialNumber.0   -> "NB-MIB::serialNumber.0 = STRING: 00112B015EA3"
+
+RETVAL=$(snmpget -v 3 -u $SEC_NAME -A $AUTH_PASSWORD -n "" -l authNoPriv -a $AUTH_PROTOCOL -x $PRIV_PROTOCOL $HOST $KEY 2>&1)
+
+if [[ $? -gt 0 ]]; then
+    #2018-06-21, mm: Disabled as we produce many log lines in offline times
+    #logger -t "$0" "HOST=${HOST}:KEY=${KEY} returned $RETVAL"
+    if [ "x${DEFAULT_IF_EMPTY}" == "xUSE_LATEST_NON_EMPTY_VALUE" ]; then
+        cat ${DATA_DIR}/mit-snmpget-${HOST}-${KEY}
+    else
+        echo $DEFAULT_IF_EMPTY
+    fi
+else
+    RETVAL2=$(echo $RETVAL | cut -d= -f2 | cut '-d ' -f3-)
+    if [ "x${DEFAULT_IF_EMPTY}" == "xUSE_LATEST_NON_EMPTY_VALUE" ]; then
+        echo $RETVAL2 > ${DATA_DIR}/mit-snmpget-${HOST}-${KEY}
+    fi
+    echo $RETVAL2
+fi
+
