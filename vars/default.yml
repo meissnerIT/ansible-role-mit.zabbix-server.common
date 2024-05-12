@@ -1,0 +1,6 @@
+---
+# vars file for zabbix-server (default)
+
+zabbix_server_externalscripts_path: /usr/lib/zabbix/externalscripts
+
+

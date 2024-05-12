@@ -1,0 +1,5 @@
+---
+# vars file for zabbix-server (FreeBSD)
+
+zabbix_server_externalscripts_path: /usr/local/etc/zabbix64/zabbix/externalscripts
+

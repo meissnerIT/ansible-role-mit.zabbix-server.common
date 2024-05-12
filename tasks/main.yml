@@ -1,10 +1,20 @@
 
-- name: Ensure helper applications
-  apt: pkg=curl
+- name: "Include OS-specific variables"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
 
-- name: Copy scripts to /usr/lib/zabbix/externalscripts/
-  copy: src={{ item }} dest=/usr/lib/zabbix/externalscripts/ mode=755
-  with_items:
+- name: Ensure helper applications
+  package:
+    name: curl
+
+- name: Copy scripts to {{ zabbix_server_externalscripts_path }}
+  copy:
+    src: "{{ item }}"
+    dest: "{{ zabbix_server_externalscripts_path }}"
+    mode: "0755"
+  loop:
     - check-ssl-tls.sh
     - check-ssl-tls-sni.sh
     - mit-get-http-header.sh
