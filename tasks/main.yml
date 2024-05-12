@@ -9,8 +9,16 @@
   package:
     name: curl
 
+- name: Create {{ zabbix_server_mit_snmpget_path }}
+  file:
+    dest: "{{ zabbix_server_mit_snmpget_path }}"
+    state: directory
+    owner: zabbix
+    group: zabbix
+    mode: 0750
+
 - name: Copy scripts to {{ zabbix_server_externalscripts_path }}
-  copy:
+  template:
     src: "{{ item }}"
     dest: "{{ zabbix_server_externalscripts_path }}"
     mode: "0755"
@@ -18,5 +26,6 @@
     - check-ssl-tls.sh
     - check-ssl-tls-sni.sh
     - mit-get-http-header.sh
+    - mit-snmpget
+    - mit-snmpget3
     - mit-zabbix-executor
-

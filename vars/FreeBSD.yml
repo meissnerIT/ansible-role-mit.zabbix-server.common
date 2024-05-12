@@ -2,4 +2,5 @@
 # vars file for zabbix-server (FreeBSD)
 
 zabbix_server_externalscripts_path: /usr/local/etc/zabbix64/zabbix/externalscripts
+zabbix_server_mit_snmpget_path: /var/db/mit-snmpget
 
