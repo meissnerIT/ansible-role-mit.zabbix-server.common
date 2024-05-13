@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 #
 # Distributed via ansible - mit.zabbix-server.common
 #

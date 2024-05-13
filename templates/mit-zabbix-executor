@@ -18,7 +18,7 @@ fi
 
 i=2
 while true; do
-    RESULT=$(timeout --preserve-status ${i}s /usr/lib/zabbix/externalscripts/"$@" 2>&1)
+    RESULT=$(timeout --preserve-status ${i}s {{ zabbix_server_externalscripts_path }}/"$@" 2>&1)
     # Stop loop if exit code equals 0
     [ $? -eq 0 ] && break
     # Stop loop if i>100
