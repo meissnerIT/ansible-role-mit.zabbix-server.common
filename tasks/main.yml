@@ -29,3 +29,14 @@
     - mit-snmpget
     - mit-snmpget3
     - mit-zabbix-executor
+
+- name: Check depreated (1/2)
+  ansible.builtin.stat:
+    path: "{{ zabbix_server_mit_snmpget_path_deprecated }}"
+  register: st
+
+- name: Check depreated (2/2)
+  ansible.builtin.fail:
+    msg: "Please remove {{ zabbix_server_mit_snmpget_path_deprecated }}, it has been replaced by {{ zabbix_server_mit_snmpget_path }}"
+  when: st.stat.exists
+
