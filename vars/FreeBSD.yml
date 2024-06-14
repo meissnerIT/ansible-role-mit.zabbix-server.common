@@ -1,6 +1,7 @@
 ---
 # vars file for zabbix-server (FreeBSD)
 
+zabbix_proxy_servce: zabbix_proxy
 zabbix_server_externalscripts_path: /usr/local/etc/zabbix64/zabbix/externalscripts
 zabbix_server_mit_snmpget_path: /var/db/zabbix/mit-snmpget
 zabbix_server_mit_snmpget_path_deprecated: /var/db/mit-snmpget

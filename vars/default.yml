@@ -1,6 +1,7 @@
 ---
 # vars file for zabbix-server (default)
 
+zabbix_proxy_servce: zabbix-proxy
 zabbix_server_externalscripts_path: /usr/lib/zabbix/externalscripts
 zabbix_server_mit_snmpget_path: /var/lib/zabbix/mit-snmpget
 zabbix_server_mit_snmpget_path_deprecated: /var/lib/mit-snmpget
