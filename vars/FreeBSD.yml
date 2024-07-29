@@ -1,6 +1,8 @@
 ---
 # vars file for zabbix-server (FreeBSD)
 
+# Zabbix doesn't provide PATH, so env bash doesn't work.
+bash_bin: /usr/local/bin/bash
 zabbix_proxy_servce: zabbix_proxy
 zabbix_server_externalscripts_path: /usr/local/etc/zabbix64/zabbix/externalscripts
 zabbix_server_mit_snmpget_path: /var/db/zabbix/mit-snmpget

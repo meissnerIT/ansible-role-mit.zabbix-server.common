@@ -5,9 +5,12 @@
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
 
+# coreutils is needed on FreeBSD to provide gdate
 - name: Ensure helper applications
   package:
-    name: curl
+    name:
+      - coreutils
+      - curl
 
 - name: Create {{ zabbix_server_mit_snmpget_path }}
   file:

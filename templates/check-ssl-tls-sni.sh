@@ -1,4 +1,4 @@
-#!/bin/bash
+#!{{ bash_bin }}
 #
 # Distributed via ansible - mit.zabbix-server.common
 #
@@ -128,6 +128,9 @@ fi
 LOC="POSIX"
 export LC_ALL=$LOC
 
+# On FreeBSD zabbix doesn't provide PATH
+PATH=/bin:/usr/bin:/usr/local/bin
+
 # assign arguments to variables
 #
 HOST=$1 # IP:PORT or FQDN:PORT
@@ -143,7 +146,16 @@ OPENSSL="/usr/bin/openssl" # path to openssl binary
 TIMEOUT=10 # connect timeout in seconds
 OPENSSL_PROTOS="smtp pop3 imap ftp xmpp" # which protocols are suppored by openssl for STARTTLS handshakes
 
-
+if date --version 2>&1 | grep -qi "date: illegal option"; then
+    if which -s gdate; then
+        date_bin=$(which gdate)
+    else
+        echo "Date doesn't support parameter '--version', please install gdate from coreutils"
+        exit 1
+    fi
+else
+    date_bin=date
+fi
 
 ######
 # Determine Service Type (Native vs. STARTTLS)
@@ -196,8 +208,8 @@ case $CHECK_TYPE in
       exit 1
     else
     # certificate attribute received send it to zabbix, exit 0
-      EXP_DATE=$(date --date="$($echo_bin $RETURN | cut -d= -f2)" +%s); \
-      CUR_DATE=$(date --date="`date`" +%s); \
+      EXP_DATE=$($date_bin --date="$($echo_bin $RETURN | cut -d= -f2)" +%s); \
+      CUR_DATE=$($date_bin --date="`$date_bin`" +%s); \
       RETURN=$(($EXP_DATE-$CUR_DATE))
       echo $RETURN
       exit 0

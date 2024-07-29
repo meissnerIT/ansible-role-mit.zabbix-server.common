@@ -1,4 +1,4 @@
-#!/bin/bash
+#!{{ bash_bin }}
 #
 # script: ssltls.check 
 # version: 1.1
