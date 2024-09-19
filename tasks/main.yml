@@ -1,27 +1,37 @@
+---
+# mit-zabbix-set-pkg-name-prefix - 5, 6, 64, 7
+- name: Set zabbix_proxy_version (1/2)
+  ansible.builtin.set_fact:
+    zabbix_proxy_pkg_name_prefix: zabbix{{ zabbix_proxy_version | regex_replace('^([0-9]+)\.([0-9]+.*)$', '\1') }}
+  when: zabbix_proxy_version is defined
+- name: Set zabbix_proxy_version (2/2)
+  ansible.builtin.set_fact:
+    zabbix_proxy_pkg_name_prefix: zabbix{{ zabbix_proxy_version | regex_replace('^([0-9]+)\.([0-9]+)(.*)$', '\1\2') }}
+  when: zabbix_proxy_version is defined and zabbix_proxy_version is regex('^6.4.*')
 
-- name: "Include OS-specific variables"
-  include_vars: "{{ item }}"
+- name: Include OS-specific variables
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_os_family }}.yml"
-    - "default.yml"
+    - default.yml
 
 # coreutils is needed on FreeBSD to provide gdate
 - name: Ensure helper applications
-  package:
+  ansible.builtin.package:
     name:
       - coreutils
       - curl
 
 - name: Create {{ zabbix_server_mit_snmpget_path }}
-  file:
+  ansible.builtin.file:
     dest: "{{ zabbix_server_mit_snmpget_path }}"
     state: directory
     owner: zabbix
     group: zabbix
-    mode: 0750
+    mode: "0750"
 
 - name: Copy scripts to {{ zabbix_server_externalscripts_path }}
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
     dest: "{{ zabbix_server_externalscripts_path }}"
     mode: "0755"
@@ -40,6 +50,5 @@
 
 - name: Check depreated (2/2)
   ansible.builtin.fail:
-    msg: "Please remove {{ zabbix_server_mit_snmpget_path_deprecated }}, it has been replaced by {{ zabbix_server_mit_snmpget_path }}"
+    msg: Please remove {{ zabbix_server_mit_snmpget_path_deprecated }}, it has been replaced by {{ zabbix_server_mit_snmpget_path }}
   when: st.stat.exists
-
