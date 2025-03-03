@@ -1,15 +1,4 @@
 ---
-
-# mit-zabbix-set-pkg-name-prefix - 5, 6, 64, 7
-
-- name: Set zabbix_server_pkg_name_prefix (1/2)
-  ansible.builtin.set_fact:
-    zabbix_server_pkg_name_prefix: zabbix{{ zabbix_server_version | regex_replace('^([0-9]+)\.([0-9]+.*)$', '\1') }}
-- name: Set zabbix_server_pkg_name_prefix (2/2)
-  ansible.builtin.set_fact:
-    zabbix_server_pkg_name_prefix: zabbix{{ zabbix_server_version | regex_replace('^([0-9]+)\.([0-9]+)(.*)$', '\1\2') }}
-  when: zabbix_server_version is regex('^6\.4\..*')
-
 - name: Include OS-specific variables
   ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
@@ -30,6 +19,12 @@
     owner: zabbix
     group: zabbix
     mode: "0750"
+
+- name: Create {{ zabbix_server_externalscripts_path }} # noqa[name-template]
+  ansible.builtin.file:
+    path: "{{ zabbix_server_externalscripts_path }}"
+    state: directory
+    mode: "755"
 
 - name: Copy scripts to {{ zabbix_server_externalscripts_path }}
   ansible.builtin.template:
