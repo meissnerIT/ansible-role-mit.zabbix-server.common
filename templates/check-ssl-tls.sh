@@ -120,7 +120,8 @@ if [ $# -ne 3 ]; then
  exit 1
 fi
 
-LOC="en_US.UTF8"
+# en_US.UTF-8 on FreeBSD, en_US.utf8 on Debian 12
+LOC=$(/usr/bin/locale -a | /usr/bin/grep -i en_us.utf)
 export LC_ALL=$LOC
 
 # assign arguments to variables
