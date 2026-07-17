@@ -32,8 +32,9 @@
     dest: "{{ zabbix_server_externalscripts_path }}"
     mode: "0755"
   loop:
-    - check-ssl-tls.sh
+    - check-smtp-dane.sh
     - check-ssl-tls-sni.sh
+    - check-ssl-tls.sh
     - mit-get-http-header.sh
     - mit-snmpget
     - mit-snmpget3
